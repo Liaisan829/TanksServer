@@ -1,8 +1,5 @@
 package ru.kpfu.itis.akhmetova.view;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,12 +8,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import ru.kpfu.itis.akhmetova.MainApplication;
+import ru.kpfu.itis.akhmetova.model.Tank;
 
 public class GameView extends BaseView {
 
     private GridPane gridPane = null;
+    private Scene mainScene;
     private VBox vBox;
-    private StackPane stackPane;
     private Button changeColor;
     private Label first;
     private Label second;
@@ -27,16 +25,9 @@ public class GameView extends BaseView {
     private Label seventh;
     private Label eighth;
     private Label ninth;
-    private Image image;
+    private ImageView imageView;
+    private Tank clientTank1;
     private final MainApplication application = BaseView.getApplication();
-//    private final EventHandler<ActionEvent> changeColorOfCell = new EventHandler<ActionEvent>() {
-//        @Override
-//        public void handle(ActionEvent event) {
-//            stackPane = new StackPane();
-//            stackPane.getChildren().add(second);
-//            stackPane.setStyle("-fx-background-color: blue");
-//        }
-//    };
 
     public GameView() throws Exception {
     }
@@ -46,19 +37,16 @@ public class GameView extends BaseView {
         if (gridPane == null) {
             this.createView();
         }
-
         return gridPane;
     }
 
     private void createView() {
+        imageView = new ImageView(new Image("tank.jpg", 50, 50, false, true));
+        clientTank1 = new Tank(imageView, 0.0, 0.0, 0);
         gridPane = new GridPane();
-        stackPane = new StackPane();
-        changeColor = new Button("change color");
-        changeColor.setMaxWidth(190);
-//        changeColor.setOnAction(changeColorOfCell);
 
-        first = new Label("first");
-        second = new Label("second");
+        first = new Label("");
+        second = new Label("");
         third = new Label("");
         fourth = new Label("");
         fifth = new Label("");
@@ -66,14 +54,6 @@ public class GameView extends BaseView {
         seventh = new Label("");
         eighth = new Label("");
         ninth = new Label("");
-
-        image = new Image("tank.jpg", 50, 50, false, true);
-        ImageView imageView = new ImageView(image);
-//        imageView.setX(70);
-//        imageView.setY(70);
-
-//        stackPane.getChildren().add(first);
-//        stackPane.setStyle("-fx-background-color: blue");
 
         gridPane.getColumnConstraints().add(new ColumnConstraints(150, 150, Double.MAX_VALUE));
         ColumnConstraints column2 = new ColumnConstraints(150, 150, Double.MAX_VALUE);
@@ -97,33 +77,59 @@ public class GameView extends BaseView {
         gridPane.add(eighth, 1, 2);
         gridPane.add(ninth, 2, 2);
 
-        System.out.println(gridPane.getChildren().get(1).getLayoutX());
-//        gridPane.getChildren().add(stackPane);
-//        gridPane.getChildren().add(changeColor);
-
-//        application.getPrimaryStage().
-
-        Scene mainScene = new Scene(gridPane, 600, 500);
+        mainScene = new Scene(gridPane, 600, 500);
         application.getPrimaryStage().setScene(mainScene);
 
         mainScene.setOnKeyPressed(
                 key -> {
                     switch (key.getCode()) {
                         case UP:
+                            //надо получить текущие координаты и прибавить к ним в соответсвии с кнопкой и передать их уже в метод
                             System.out.println("up");
+                            clientTank1.setCurrentX(0.0);
+                            clientTank1.setCurrentY(-1.0);
+                            gridPane.requestLayout();
+                            gridPane.getChildren().removeAll(imageView);
+                            gridPane.requestLayout();
+                            System.out.println(clientTank1.getCurrentX());
+                            System.out.println(clientTank1.getCurrentY());
                             break;
                         case DOWN:
                             System.out.println("down");
+                            clientTank1.setCurrentX(0.0);
+                            clientTank1.setCurrentY(1.0);
+                            System.out.println(clientTank1.getCurrentX());
+                            System.out.println(clientTank1.getCurrentY());
                             break;
                         case LEFT:
                             System.out.println("left");
+                            clientTank1.setCurrentX(-1.0);
+                            clientTank1.setCurrentY(0.0);
+                            System.out.println(clientTank1.getCurrentX());
+                            System.out.println(clientTank1.getCurrentY());
                             break;
                         case RIGHT:
                             System.out.println("right");
+                            moveClientTank(gridPane, clientTank1, 1, 0);
+                            clientTank1.setCurrentX(1.0);
+                            clientTank1.setCurrentY(0.0);
+                            System.out.println(clientTank1.getCurrentX());
+                            System.out.println(clientTank1.getCurrentY());
+                            break;
+                        case ENTER:
+                            System.out.println("take money");
                             break;
                     }
                 }
         );
+    }
 
+    public void moveClientTank(GridPane gridPane, Tank clientTank, int newX, int newY) {
+        gridPane.getChildren().remove(clientTank.getImage());
+//        gridPane.add(clientTank.getImage(), newX, newY);
+        gridPane.requestLayout();
+        gridPane.requestFocus();
+        gridPane.relocate(600.0, 700.0);
     }
 }
+
