@@ -6,10 +6,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import ru.kpfu.itis.akhmetova.client.ChatClient;
 import ru.kpfu.itis.akhmetova.model.UserConfig;
-import ru.kpfu.itis.akhmetova.view.BaseView;
-import ru.kpfu.itis.akhmetova.view.ChatView;
-import ru.kpfu.itis.akhmetova.view.GameView;
-import ru.kpfu.itis.akhmetova.view.UserConfigView;
+import ru.kpfu.itis.akhmetova.view.*;
 
 import java.io.IOException;
 
@@ -28,6 +25,8 @@ public class MainApplication extends Application {
     private UserConfigView userConfigView;
 
     private GameView gameView;
+
+    private InfoView infoView;
 
     public ChatView getChatView() {
         return chatView;
@@ -85,6 +84,14 @@ public class MainApplication extends Application {
         this.gameView = gameView;
     }
 
+    public InfoView getInfoView() {
+        return infoView;
+    }
+
+    public void setInfoView(InfoView infoView) {
+        this.infoView = infoView;
+    }
+
     public void startChatClient() throws IOException {
         getChatClient().start();
     }
@@ -97,7 +104,7 @@ public class MainApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Tanks");
-        this.primaryStage.setOnCloseRequest(e-> System.exit(0));
+        this.primaryStage.setOnCloseRequest(e -> System.exit(0));
 
         chatClient = new ChatClient(this);
 
@@ -106,11 +113,12 @@ public class MainApplication extends Application {
         userConfigView = new UserConfigView();
         chatView = new ChatView();
         gameView = new GameView();
+        infoView = new InfoView();
 
         this.initLayout();
     }
 
-    private void initLayout(){
+    private void initLayout() {
         rootLayout = new BorderPane();
 
         Scene scene = new Scene(rootLayout, 600, 500);

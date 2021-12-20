@@ -7,21 +7,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import ru.kpfu.itis.akhmetova.MainApplication;
 import ru.kpfu.itis.akhmetova.model.UserConfig;
 
 import java.io.IOException;
 
-
 public class UserConfigView extends BaseView {
 
     private Text welcomeText1;
-    private Text welcomeText2;
     private AnchorPane pane = null;
     private TextField name;
     private TextField host;
@@ -47,7 +42,7 @@ public class UserConfigView extends BaseView {
                     e.printStackTrace();
                 }
 
-                application.setView(application.getGameView());
+                application.setView(application.getInfoView());
             }
         }
     };
@@ -70,12 +65,11 @@ public class UserConfigView extends BaseView {
         pane.setStyle("-fx-background-color: green");
         vBox = new VBox(10);
 
-        welcomeText1 = new Text("Добро пожаловать в игру Танки!");
-        welcomeText2 = new Text("Укажите Ваше имя");
+        welcomeText1 = new Text("Добро пожаловать в игру Танки!" + "\n" + "Укажите Ваше имя");
+        welcomeText1.setStyle("-fx-font-size: 25");
 
         Label nameLabel = new Label("name");
         name = new TextField();
-
 
         Label hostLabel = new Label("host");
         host = new TextField();
@@ -85,7 +79,7 @@ public class UserConfigView extends BaseView {
         port = new TextField();
         port.setText("5555");
 
-        vBox.getChildren().addAll(welcomeText1, welcomeText2, nameLabel, name, hostLabel, host, portLabel, port);
+        vBox.getChildren().addAll(welcomeText1, nameLabel, name, hostLabel, host, portLabel, port);
 
         start = new Button("Start");
         start.setOnAction(startEvent);
