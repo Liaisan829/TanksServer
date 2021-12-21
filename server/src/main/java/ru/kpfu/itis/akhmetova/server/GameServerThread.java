@@ -1,24 +1,22 @@
 package ru.kpfu.itis.akhmetova.server;
 
-import ru.kpfu.itis.akhmetova.server.ChatServer;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.SocketException;
 
-public class ClientThread implements Runnable {
+public class GameServerThread implements Runnable {
 
     private final BufferedReader input;
 
     private final BufferedWriter output;
 
-    private final ChatServer server;
+    private final GameServer gameServer;
 
-    public ClientThread(BufferedReader input, BufferedWriter output, ChatServer server) {
+    public GameServerThread(BufferedReader input, BufferedWriter output, GameServer server) {
         this.input = input;
         this.output = output;
-        this.server = server;
+        this.gameServer = server;
     }
 
     public BufferedReader getInput() {
@@ -29,8 +27,8 @@ public class ClientThread implements Runnable {
         return output;
     }
 
-    public ChatServer getServer() {
-        return server;
+    public GameServer getGameServer() {
+        return gameServer;
     }
 
 
@@ -39,10 +37,10 @@ public class ClientThread implements Runnable {
         try {
             while (true) {
                 String message = input.readLine();
-                server.sendMessage(message, this);
+                gameServer.sendMessage(message, this);
             }
         } catch (SocketException socketException) {
-            server.removeClient(this);
+            gameServer.removeClient(this);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,66 +1,72 @@
 package ru.kpfu.itis.akhmetova.model;
 
-import javafx.scene.Node;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Tank{
-    private ImageView image;
-    private double currentX;
-    private double currentY;
-    private int points;
+    private Image image;
+    private double positionX;
+    private double positionY;
+    private double velocityX;
+    private double velocityY;
+    private double width;
+    private double height;
 
-    public Tank(ImageView image, double currentX, double currentY, int points) {
-        this.image = image;
-        this.currentX = currentX;
-        this.currentY = currentY;
-        this.points = points;
+    public Tank() {
+        positionX = 0;
+        positionY = 0;
+        velocityX = 0;
+        velocityY = 0;
     }
 
-    public ImageView getImage() {
-        return image;
+    public void setImage(Image i) {
+        this.image = i;
+        width = i.getWidth();
+        height = i.getHeight();
     }
 
-    public void setImage(ImageView image) {
-        this.image = image;
+    public void setImage(String filename) {
+        Image i = new Image(filename);
+        setImage(i);
     }
 
-    public double getCurrentX() {
-        return currentX;
+    public void setPosition(double x, double y) {
+        positionX = x;
+        positionY = y;
     }
 
-    public void setCurrentX(double currentX) {
-//        if (this.currentX < 0) {
-//            System.out.println("граница ячеек");
-//        }
-        this.currentX = this.currentX + currentX;
+    public void setVelocity(double x, double y) {
+        velocityX = x;
+        velocityY = y;
     }
 
-    public double getCurrentY() {
-        return currentY;
+    public void addVelocity(double x, double y) {
+        velocityX += x;
+        velocityY += y;
     }
 
-    public void setCurrentY(double currentY) {
-        this.currentY = this.currentY + currentY;
+    public void update(double time) {
+        positionX += velocityX * time;
+        positionY += velocityY * time;
     }
 
-    public int getPoints() {
-        return points;
+    public void render(GraphicsContext gc) {
+        gc.drawImage(image, positionX, positionY);
     }
 
-    public void setPoints(int points) {
-        this.points = this.points + points;
+    public Rectangle2D getBoundary() {
+        return new Rectangle2D(positionX, positionY, width, height);
     }
 
-    @Override
+    public boolean intersects(Tank tank) {
+        return tank.getBoundary().intersects(this.getBoundary());
+    }
+
     public String toString() {
-        return "Tank{" +
-                "image=" + image +
-                ", currentX=" + currentX +
-                ", currentY=" + currentY +
-                ", points=" + points +
-                '}';
+        return " Position: [" + positionX + "," + positionY + "]"
+                + " Velocity: [" + velocityX + "," + velocityY + "]";
     }
 
 }

@@ -10,6 +10,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import ru.kpfu.itis.akhmetova.MainApplication;
 
+import java.io.IOException;
+
 public class ChatView extends BaseView {
 
     private TextArea input;
@@ -36,8 +38,12 @@ public class ChatView extends BaseView {
     private final EventHandler<ActionEvent> moveBack = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
+            try {
                 application.setView(application.getInfoView());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        }
         };
 
     public ChatView() throws Exception {

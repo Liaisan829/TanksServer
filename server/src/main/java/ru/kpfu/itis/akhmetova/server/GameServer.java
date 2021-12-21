@@ -8,11 +8,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatServer {
+public class GameServer {
 
     private static final int PORT = 5555;
     private ServerSocket socket;
-    private final List<ClientThread> clients = new ArrayList<>();
+    private final List<GameServerThread> clients = new ArrayList<>();
 
 
     public void start() throws IOException {
@@ -24,15 +24,15 @@ public class ChatServer {
             BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), StandardCharsets.UTF_8));
             BufferedWriter output = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8));
 
-            ClientThread clientThread = new ClientThread(input, output, this);
+            GameServerThread clientThread = new GameServerThread(input, output, this);
             clients.add(clientThread);
 
             new Thread(clientThread).start();
         }
     }
 
-    public void sendMessage(String message, ClientThread sender) throws IOException {
-        for (ClientThread client : clients) {
+    public void sendMessage(String message, GameServerThread sender) throws IOException {
+        for (GameServerThread client : clients) {
             if (client.equals(sender)){
                 continue;
             }
@@ -44,12 +44,12 @@ public class ChatServer {
 
 
 
-    public void removeClient(ClientThread client) {
+    public void removeClient(GameServerThread client) {
         clients.remove(client);
     }
 
     public static void main(String[] args) throws IOException {
-        ChatServer chatServer = new ChatServer();
+        GameServer chatServer = new GameServer();
         chatServer.start();
     }
 }

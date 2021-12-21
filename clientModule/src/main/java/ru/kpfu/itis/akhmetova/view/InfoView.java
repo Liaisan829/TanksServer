@@ -11,6 +11,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import ru.kpfu.itis.akhmetova.MainApplication;
 
+import java.io.IOException;
+
 public class InfoView extends BaseView {
 
     private AnchorPane pane = null;
@@ -38,7 +40,11 @@ public class InfoView extends BaseView {
 //                } catch (IOException e) {
 //                    e.printStackTrace();
 //                }
-                application.setView(application.getGameView());
+                try {
+                    application.setView(application.getGameView());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     };
@@ -48,7 +54,11 @@ public class InfoView extends BaseView {
         public void handle(ActionEvent event) {
             if (event.getSource() == chat) {
                 //какая то логика начала игры, добавления пользователя и включения бота
-                application.setView(application.getChatView());
+                try {
+                    application.setView(application.getChatView());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     };
@@ -81,7 +91,7 @@ public class InfoView extends BaseView {
         chat = new Button("Chat");
         chat.setOnAction(showChat);
 
-        image = new Image("tank.jpg", 300, 300, false, true);
+        image = new Image("image/tank.jpg", 300, 300, false, true);
         ImageView imageView = new ImageView(image);
         imageView.setX(250);
         imageView.setY(70);

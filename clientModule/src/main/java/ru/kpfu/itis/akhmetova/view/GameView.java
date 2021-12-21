@@ -1,135 +1,184 @@
 package ru.kpfu.itis.akhmetova.view;
 
+import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
+import ru.kpfu.itis.akhmetova.IntValue;
+import ru.kpfu.itis.akhmetova.LongValue;
 import ru.kpfu.itis.akhmetova.MainApplication;
 import ru.kpfu.itis.akhmetova.model.Tank;
 
-public class GameView extends BaseView {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-    private GridPane gridPane = null;
-    private Scene mainScene;
-    private VBox vBox;
-    private Button changeColor;
-    private Label first;
-    private Label second;
-    private Label third;
-    private Label fourth;
-    private Label fifth;
-    private Label sixth;
-    private Label seventh;
-    private Label eighth;
-    private Label ninth;
-    private ImageView imageView;
-    private Tank clientTank1;
+public class GameView extends BaseView {
     private final MainApplication application = BaseView.getApplication();
+    private static Stage window;
+    private Group root;
+    private Scene theScene;
+    private ActionEvent event = new ActionEvent();
 
     public GameView() throws Exception {
     }
+//    private static JavaTanksServer gameServer;
+//
+//    public static void main(String[] args) {
+//        gameServer = JavaTanksServer.getInstance();
+//        launch();
+//    }
 
-    @Override
-    public Parent getView() {
-        if (gridPane == null) {
-            this.createView();
-        }
-        return gridPane;
+    private void exit() {
+        event.consume();
+        System.out.println("Good bye!");
+        Platform.exit();
     }
 
-    private void createView() {
-        imageView = new ImageView(new Image("tank.jpg", 50, 50, false, true));
-        clientTank1 = new Tank(imageView, 0.0, 0.0, 0);
-        gridPane = new GridPane();
+    private void createView() throws IOException {
+        event.consume();
 
-        first = new Label("");
-        second = new Label("");
-        third = new Label("");
-        fourth = new Label("");
-        fifth = new Label("");
-        sixth = new Label("");
-        seventh = new Label("");
-        eighth = new Label("");
-        ninth = new Label("");
+        window = application.getPrimaryStage();
+        window.setTitle("GAME");
 
-        gridPane.getColumnConstraints().add(new ColumnConstraints(150, 150, Double.MAX_VALUE));
-        ColumnConstraints column2 = new ColumnConstraints(150, 150, Double.MAX_VALUE);
-        gridPane.getColumnConstraints().add(column2);
-        ColumnConstraints column3 = new ColumnConstraints(150, 150, Double.MAX_VALUE);
-        gridPane.getColumnConstraints().add(column3);
+         root = new Group();
+         theScene = new Scene(root);
 
-        gridPane.getRowConstraints().add(new RowConstraints(150));
-        gridPane.getRowConstraints().add(new RowConstraints(150));
-        gridPane.getRowConstraints().add(new RowConstraints(150));
+        Canvas canvas = new Canvas(1000, 720);
+        root.getChildren().add(canvas);
 
-        gridPane.setGridLinesVisible(true);
+        ArrayList<String> input = new ArrayList<>();
 
-        gridPane.add(imageView, 0, 0);
-        gridPane.add(second, 1, 0);
-        gridPane.add(third, 2, 0);
-        gridPane.add(fourth, 0, 1);
-        gridPane.add(fifth, 1, 1);
-        gridPane.add(sixth, 2, 1);
-        gridPane.add(seventh, 0, 2);
-        gridPane.add(eighth, 1, 2);
-        gridPane.add(ninth, 2, 2);
+//        ОЧЕРЕДИ ДВИЖЕНИЙ ТАНКА
+        theScene.setOnKeyPressed(
+                e -> {
+                    String code = e.getCode().toString();
+                    if (!input.contains(code))
+                        input.add(code);
+                });
 
-        mainScene = new Scene(gridPane, 600, 500);
-        application.getPrimaryStage().setScene(mainScene);
+        theScene.setOnKeyReleased(
+                e -> {
+                    String code = e.getCode().toString();
+                    input.remove(code);
+                });
 
-        mainScene.setOnKeyPressed(
-                key -> {
-                    switch (key.getCode()) {
-                        case UP:
-                            //надо получить текущие координаты и прибавить к ним в соответсвии с кнопкой и передать их уже в метод
-                            System.out.println("up");
-                            clientTank1.setCurrentX(0.0);
-                            clientTank1.setCurrentY(-1.0);
-                            gridPane.requestLayout();
-                            gridPane.getChildren().removeAll(imageView);
-                            gridPane.requestLayout();
-                            System.out.println(clientTank1.getCurrentX());
-                            System.out.println(clientTank1.getCurrentY());
-                            break;
-                        case DOWN:
-                            System.out.println("down");
-                            clientTank1.setCurrentX(0.0);
-                            clientTank1.setCurrentY(1.0);
-                            System.out.println(clientTank1.getCurrentX());
-                            System.out.println(clientTank1.getCurrentY());
-                            break;
-                        case LEFT:
-                            System.out.println("left");
-                            clientTank1.setCurrentX(-1.0);
-                            clientTank1.setCurrentY(0.0);
-                            System.out.println(clientTank1.getCurrentX());
-                            System.out.println(clientTank1.getCurrentY());
-                            break;
-                        case RIGHT:
-                            System.out.println("right");
-                            moveClientTank(gridPane, clientTank1, 1, 0);
-                            clientTank1.setCurrentX(1.0);
-                            clientTank1.setCurrentY(0.0);
-                            System.out.println(clientTank1.getCurrentX());
-                            System.out.println(clientTank1.getCurrentY());
-                            break;
-                        case ENTER:
-                            System.out.println("take money");
-                            break;
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        Font theFont = Font.font("Helvetica", FontWeight.BOLD, 24);
+        gc.setFont(theFont);
+        gc.setFill(Color.GREEN);
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(1);
+
+        Tank player = new Tank();
+        player.setImage("/image/player.png");
+        player.setPosition(0, 0);
+        Tank enemy = new Tank();
+        enemy.setImage("/image/enemy.png");
+        enemy.setPosition(900, 600);
+        enemy.render(gc);
+
+        System.out.println("танки созданы");
+
+        ArrayList<Tank> moneybagList = new ArrayList<>();
+
+        Thread thread = new Thread(() -> {
+            for (int i = 0; i < 20; i++) {
+                try {
+                    Thread.sleep(4000);
+                    Tank moneybag = new Tank();
+                    //TODO почему деньги это танк
+                    moneybag.setImage("/image/moneybag.png");
+                    double px = 1950 * Math.random() + 50;
+                    double py = 650 * Math.random() + 20;
+                    moneybag.setPosition(px, py);
+                    moneybagList.add(moneybag);
+                } catch (InterruptedException e) {
+                }
+            }
+        });
+        System.out.println("деньги расставляются по рандому");
+
+        thread.start();
+        LongValue lastNanoTime = new LongValue(System.nanoTime());
+
+        IntValue score = new IntValue(0);
+
+        new AnimationTimer() {
+            public void handle(long currentNanoTime) {
+                // calculate time since last update.
+                if (score.value * 100 >= 1000) {
+                    if (thread.isAlive()) thread.interrupt();
+                    System.out.println("VICTORY");
+                    System.exit(0);
+                }
+                double elapsedTime = (currentNanoTime - lastNanoTime.value) / 1000000000.0;
+                lastNanoTime.value = currentNanoTime;
+
+                // game logic
+
+                System.out.println("логика игры пошла");
+
+                player.setVelocity(0, 0);
+                if (input.contains("LEFT"))
+                    player.addVelocity(-100, 0);
+                if (input.contains("RIGHT"))
+                    player.addVelocity(100, 0);
+                if (input.contains("UP"))
+                    player.addVelocity(0, -100);
+                if (input.contains("DOWN"))
+                    player.addVelocity(0, 100);
+
+                player.update(elapsedTime);
+
+                System.out.println("после клавиш и обновления");
+
+                // collision detection
+
+                Iterator<Tank> moneybagIter = moneybagList.iterator();
+                while (moneybagIter.hasNext()) {
+                    Tank moneybag = moneybagIter.next();
+                    if (player.intersects(moneybag)) {
+                        moneybagIter.remove();
+                        score.value++;
                     }
                 }
-        );
+
+                System.out.println("танк забрал деньги");
+
+                // render
+                gc.clearRect(0, 0, 1280, 720);
+                player.render(gc);
+                enemy.render(gc);
+
+                for (Tank moneybag : moneybagList)
+                    moneybag.render(gc);
+
+                String pointsText = "Cash: $" + (100 * score.value);
+                gc.fillText(pointsText, 360, 36);
+                gc.strokeText(pointsText, 360, 36);
+            }
+        }.start();
+        window.setScene(theScene);
+//        window.show();
+
     }
 
-    public void moveClientTank(GridPane gridPane, Tank clientTank, int newX, int newY) {
-        gridPane.getChildren().remove(clientTank.getImage());
-//        gridPane.add(clientTank.getImage(), newX, newY);
-        gridPane.requestLayout();
-        gridPane.requestFocus();
-        gridPane.relocate(600.0, 700.0);
+    @Override
+    public Parent getView() throws IOException {
+        if (root == null) {
+            this.createView();
+        }
+        return root;
     }
 }
 

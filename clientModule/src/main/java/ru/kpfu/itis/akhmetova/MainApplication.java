@@ -96,7 +96,7 @@ public class MainApplication extends Application {
         getChatClient().start();
     }
 
-    public void setView(BaseView view) {
+    public void setView(BaseView view) throws IOException {
         rootLayout.setCenter(view.getView());
     }
 
@@ -118,7 +118,7 @@ public class MainApplication extends Application {
         this.initLayout();
     }
 
-    private void initLayout() {
+    private void initLayout() throws IOException {
         rootLayout = new BorderPane();
 
         Scene scene = new Scene(rootLayout, 600, 500);

@@ -38,11 +38,11 @@ public class UserConfigView extends BaseView {
 
                 try {
                     application.startChatClient();
+                    application.setView(application.getInfoView());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-                application.setView(application.getInfoView());
             }
         }
     };
