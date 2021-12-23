@@ -42,14 +42,12 @@ public class GameServer {
         }
     }
 
-
-
     public void removeClient(GameServerThread client) {
         clients.remove(client);
     }
 
     public static void main(String[] args) throws IOException {
-        GameServer chatServer = new GameServer();
-        chatServer.start();
+        GameServer gameServer = new GameServer();
+        gameServer.start();
     }
 }

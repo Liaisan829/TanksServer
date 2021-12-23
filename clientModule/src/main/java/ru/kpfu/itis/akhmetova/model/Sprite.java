@@ -3,10 +3,10 @@ package ru.kpfu.itis.akhmetova.model;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
-public class Tank{
+public class Sprite {
     private Image image;
+    private int side;
     private double positionX;
     private double positionY;
     private double velocityX;
@@ -14,11 +14,12 @@ public class Tank{
     private double width;
     private double height;
 
-    public Tank() {
+    public Sprite() {
         positionX = 0;
         positionY = 0;
         velocityX = 0;
         velocityY = 0;
+        side = 1;
     }
 
     public void setImage(Image i) {
@@ -35,6 +36,22 @@ public class Tank{
     public void setPosition(double x, double y) {
         positionX = x;
         positionY = y;
+    }
+
+    public int getSide() {
+        return side;
+    }
+
+    public void setSide(int side) {
+        this.side = side;
+    }
+
+    public double getX() {
+        return this.positionX;
+    }
+
+    public double getY() {
+        return this.positionY;
     }
 
     public void setVelocity(double x, double y) {
@@ -60,8 +77,8 @@ public class Tank{
         return new Rectangle2D(positionX, positionY, width, height);
     }
 
-    public boolean intersects(Tank tank) {
-        return tank.getBoundary().intersects(this.getBoundary());
+    public boolean intersects(Sprite sprite) {
+        return sprite.getBoundary().intersects(this.getBoundary());
     }
 
     public String toString() {
