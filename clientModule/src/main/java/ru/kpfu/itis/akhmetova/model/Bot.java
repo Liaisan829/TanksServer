@@ -28,7 +28,6 @@ public class Bot {
         Random random = new Random();
         int value = random.nextInt(10);
         if(value == 0){
-            //TODO повернуть вперед и подвинуть
             moveAndRotateForward(bot);
         }
 

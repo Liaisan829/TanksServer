@@ -92,7 +92,6 @@ public class GameView extends BaseView {
                 try {
                     Thread.sleep(4000);
                     Sprite moneybag = new Sprite();
-                    //TODO почему деньги это танк
                     moneybag.setImage("/image/moneybag.png");
                     double px = 1950 * Math.random() + 50;
                     double py = 650 * Math.random() + 20;
@@ -122,11 +121,9 @@ public class GameView extends BaseView {
                 lastNanoTime.value = currentNanoTime;
 
                 // game logic
-
                 player.setVelocity(0, 0);
                 if (input.contains("LEFT")) {
                     player.setSide(0);
-                    //TODO set image
                     player.setImage("/image/playerLeft.png");
                     player.setPosition(player.getX() - 100, player.getY());
                 }
