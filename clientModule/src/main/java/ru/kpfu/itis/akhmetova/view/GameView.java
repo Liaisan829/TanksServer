@@ -122,22 +122,22 @@ public class GameView extends BaseView {
 
                 // game logic
                 player.setVelocity(0, 0);
-                if (input.contains("LEFT")) {
+                if (input.contains("A")) {
                     player.setSide(0);
                     player.setImage("/image/playerLeft.png");
                     player.setPosition(player.getX() - 100, player.getY());
                 }
-                if (input.contains("RIGHT")) {
+                if (input.contains("D")) {
                     player.setSide(2);
                     player.setImage("/image/playerRight.png");
                     player.setPosition(player.getX() + 100, player.getY());
                 }
-                if (input.contains("UP")) {
+                if (input.contains("W")) {
                     player.setSide(1);
                     player.setImage("/image/playerForward.png");
                     player.setPosition(player.getX(), player.getY() + 100);
                 }
-                if (input.contains("DOWN")) {
+                if (input.contains("S")) {
                     player.setSide(3);
                     player.setImage("/image/playerBackward.png");
                     player.setPosition(player.getX(), player.getY() - 100);

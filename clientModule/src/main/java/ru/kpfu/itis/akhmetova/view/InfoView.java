@@ -28,18 +28,6 @@ public class InfoView extends BaseView {
         @Override
         public void handle(ActionEvent event) {
             if (event.getSource() == play) {
-                //какая то логика начала игры, добавления пользователя и включения бота
-//                UserConfig userConfig = new UserConfig();
-//                userConfig.setHost(host.getText());
-//                userConfig.setPort(Integer.parseInt(port.getText()));
-//                userConfig.setName(name.getText());
-//
-//                application.setUserConfig(userConfig);
-//                try {
-//                    application.startChatClient();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
                 try {
                     application.setView(application.getGameView());
                 } catch (IOException e) {
@@ -53,7 +41,6 @@ public class InfoView extends BaseView {
         @Override
         public void handle(ActionEvent event) {
             if (event.getSource() == chat) {
-                //какая то логика начала игры, добавления пользователя и включения бота
                 try {
                     application.setView(application.getChatView());
                 } catch (IOException e) {
@@ -85,7 +72,7 @@ public class InfoView extends BaseView {
         howToPlay = new Button("How to play");
         alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("How to play");
-        alert.setContentText("hello i am alert");
+        alert.setContentText("Управляйте танком с помощью клавиш A, W, D, S и собирайте монеты. Когда наберется 1000 монет, игра заканчивается");
         howToPlay.setOnAction(event -> alert.show());
 
         chat = new Button("Chat");
